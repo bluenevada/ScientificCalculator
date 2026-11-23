@@ -1,6 +1,6 @@
 # Lasten- und Pflichtenheft: Wissenschaftlicher Taschenrechner
 
-Nov 23, 2026 · @Vina Cava
+Nov 23, 2026
 
 Schulprojekt: ein wissenschaftlicher Taschenrechner in C# mit WPF-Oberfläche, Abgabe am Nov 27, 2026. Das Lastenheft beschreibt, was der Rechner können soll; das Pflichtenheft, wie er umgesetzt wird.
 
