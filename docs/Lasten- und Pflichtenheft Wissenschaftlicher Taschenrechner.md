@@ -54,6 +54,7 @@ Nur bei verbleibender Zeit, in dieser Reihenfolge:
 ### 5. Abgrenzung
 
 Nicht Bestandteil des Projekts sind: grafische Darstellung von Funktionen, Bruchrechnung, komplexe Zahlen, Zahlensysteme (Binär/Hex) und ein Installationsprogramm.
+(Es sei denn, es ist noch Zeit)
 
 ### 6. Rahmenbedingungen
 
@@ -67,9 +68,9 @@ Einzelprojekt in einer Projektwoche (Montag bis Freitag), Abgabe am Freitag.
 | --- | --- |
 | Programmiersprache | C# |
 | Framework | .NET 10 mit WPF (Windows Presentation Foundation) |
-| Entwicklungsumgebung | Visual Studio 2022 |
+| Entwicklungsumgebung | Visual Studio 2026 |
 | Versionsverwaltung | Git mit privatem GitHub-Repository |
-| Zielsystem | Windows 10 / 11 |
+| Zielsystem | Windows 11 |
 
 ### 2. Aufbau der Anwendung
 
@@ -96,7 +97,7 @@ Das Fenster besteht aus einem Raster (`Grid`) mit 5 Spalten:
 │                     sin(30)+2^3     │
 │                              8,5    │
 ├───────┬───────┬───────┬──────┬──────┤
-│  DEG  │   π   │   e   │  C   │  ⌫   │
+│  DEG  │   π   │   e   │  C   │  ⌫  │
 │  sin  │  cos  │  tan  │  (   │  )   │
 │  log  │  ln   │   √   │  x²  │  xʸ  │
 │   7   │   8   │   9   │  ÷   │      │
@@ -110,17 +111,6 @@ Das Fenster besteht aus einem Raster (`Grid`) mit 5 Spalten:
 
 | Nr. | Umsetzung |
 | --- | --- |
-| M01 | Ein gemeinsamer Click-Handler hängt den Text der gedrückten Taste an die Anzeige an |
-| M02–M04 | `Calculator` wandelt den Ausdruck mit dem Shunting-yard-Algorithmus in Umgekehrte Polnische Notation um und berechnet ihn mit einem Stack. Rangfolge: Klammern vor Potenz vor Punkt vor Strich |
-| M05 | Ein Minus am Anfang oder nach „(“ wird als Vorzeichen erkannt; die Taste ± setzt bzw. entfernt es vor der aktuellen Zahl |
-| M06 | Die Taste „=“ übergibt den Anzeigetext an `Calculator` und zeigt das Ergebnis in der großen Zeile |
-| M07 | C leert beide Zeilen, ⌫ entfernt das letzte Zeichen |
-| M08–M11 | Funktionen werden als Text eingefügt (z. B. „sin(“) und mit `Math.Pow`, `Math.Sqrt`, `Math.Sin`, `Math.Cos`, `Math.Tan`, `Math.Log10`, `Math.Log` berechnet |
-| M12 | π und e werden durch `Math.PI` und `Math.E` ersetzt |
-| M13 | Ein Umschalter speichert den Modus; im Gradmodus wird vor sin/cos/tan mit π/180 umgerechnet |
-| M14 | Fehler werden als Ausnahmen (Exceptions) in `Calculator` ausgelöst, im Fenster mit `try`/`catch` abgefangen und als Text in der Anzeige ausgegeben |
-| M15 | Layout mit `Grid` (Zeilen und Spalten), einheitliche Tastengröße, große Schrift in der Anzeige |
-| M16 | Entwicklung und Test unter Windows 11 mit .NET 10 |
 
 ### 5. Zeitplan
 
@@ -135,23 +125,6 @@ Das Fenster besteht aus einem Raster (`Grid`) mit 5 Spalten:
 ### 6. Testfälle
 
 Getestet wird manuell über die Oberfläche. Jeder Fall wird am Freitag mit „ok“ oder „nicht ok“ abgehakt.
-
-| Nr. | Eingabe | Erwartetes Ergebnis | Anforderung |
-| --- | --- | --- | --- |
-| T01 | 2+3×4 | 14 | M02, M03 |
-| T02 | (2+3)×4 | 20 | M04 |
-| T03 | −5+3 | −2 | M05 |
-| T04 | 7,5÷2 | 3,75 | M01, M02 |
-| T05 | 2^3 | 8 | M08 |
-| T06 | √(16) | 4 | M09 |
-| T07 | sin(30) im DEG-Modus | 0,5 | M10, M13 |
-| T08 | cos(π) im RAD-Modus | −1 | M10, M12, M13 |
-| T09 | log(100) | 2 | M11 |
-| T10 | ln(e) | 1 | M11, M12 |
-| T11 | 5÷0 | Meldung „Division durch 0“ | M14 |
-| T12 | (2+3 | Meldung „Klammer fehlt“ | M14 |
-| T13 | √(−4) | Meldung „Ungültige Eingabe“ | M14 |
-| T14 | 12, dann ⌫, dann C | erst 1, dann leere Anzeige | M07 |
 
 ### 7. Abnahmekriterien
 

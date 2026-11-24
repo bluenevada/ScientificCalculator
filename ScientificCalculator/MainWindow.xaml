@@ -1,12 +1,233 @@
 ﻿<Window x:Class="ScientificCalculator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ScientificCalculator"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Rechner"
+        SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
+        Background="#ECE9D8" FontFamily="Tahoma" FontSize="12">
 
-    </Grid>
+	<Window.Resources>
+		<!-- Grundstil: XP-Taste -->
+		<Style x:Key="XpTaste" TargetType="Button">
+			<Setter Property="Width" Value="36"/>
+			<Setter Property="Height" Value="28"/>
+			<Setter Property="Margin" Value="2"/>
+			<EventSetter Event="Click" Handler="Taste_Click"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="Button">
+						<Border x:Name="Rahmen" CornerRadius="3"
+                                BorderThickness="1" BorderBrush="#003C74">
+							<Border.Background>
+								<LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+									<GradientStop Color="#FFFFFF" Offset="0"/>
+									<GradientStop Color="#F0F0EA" Offset="0.85"/>
+									<GradientStop Color="#D6D0C5" Offset="1"/>
+								</LinearGradientBrush>
+							</Border.Background>
+							<ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsMouseOver" Value="True">
+								<Setter TargetName="Rahmen" Property="BorderBrush" Value="#F8B330"/>
+							</Trigger>
+							<Trigger Property="IsPressed" Value="True">
+								<Setter TargetName="Rahmen" Property="Background" Value="#E3E2DA"/>
+							</Trigger>
+							<Trigger Property="IsEnabled" Value="False">
+								<Setter Property="Foreground" Value="#ACA899"/>
+								<Setter TargetName="Rahmen" Property="BorderBrush" Value="#C9C7BA"/>
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+
+		<!-- Standard: Funktionstasten (lila) -->
+		<Style TargetType="Button" BasedOn="{StaticResource XpTaste}">
+			<Setter Property="Foreground" Value="Purple"/>
+		</Style>
+		<!-- Blau: Ziffern, Statistik, pi -->
+		<Style x:Key="Ziffer" TargetType="Button" BasedOn="{StaticResource XpTaste}">
+			<Setter Property="Foreground" Value="Blue"/>
+		</Style>
+		<!-- Rot: Operatoren, Speicher, Löschen -->
+		<Style x:Key="Operator" TargetType="Button" BasedOn="{StaticResource XpTaste}">
+			<Setter Property="Foreground" Value="Red"/>
+		</Style>
+	</Window.Resources>
+
+	<DockPanel>
+		<!-- Menüleiste -->
+		<Menu DockPanel.Dock="Top" Background="Transparent">
+			<MenuItem Header="_Bearbeiten">
+				<MenuItem Header="_Kopieren"/>
+				<MenuItem Header="_Einfügen"/>
+			</MenuItem>
+			<MenuItem Header="_Ansicht">
+				<MenuItem Header="_Standard"/>
+				<MenuItem Header="_Wissenschaftlich" IsChecked="True"/>
+			</MenuItem>
+			<MenuItem Header="_?">
+				<MenuItem Header="_Info"/>
+			</MenuItem>
+		</Menu>
+
+		<StackPanel Margin="6">
+			<!-- Anzeige -->
+			<Border Background="White" BorderBrush="#7F9DB9" BorderThickness="1"
+        Padding="4,2" Margin="2,0,2,6">
+				<StackPanel>
+					<TextBlock x:Name="Eingabe" Foreground="Gray" TextAlignment="Right" MinHeight="16"/>
+					<TextBlock x:Name="Ergebnis" Text="0" FontSize="16" TextAlignment="Right"/>
+				</StackPanel>
+			</Border>
+
+			<!-- Zahlensystem + Winkelmaß -->
+			<DockPanel Margin="2,0,2,4">
+				<GroupBox DockPanel.Dock="Left" Margin="0,0,6,0">
+					<StackPanel Orientation="Horizontal">
+						<RadioButton Content="Hex" GroupName="System" Margin="4,2" IsEnabled="False"/>
+						<RadioButton Content="Dez" GroupName="System" Margin="4,2" IsChecked="True"/>
+						<RadioButton Content="Okt" GroupName="System" Margin="4,2" IsEnabled="False"/>
+						<RadioButton Content="Bin" GroupName="System" Margin="4,2" IsEnabled="False"/>
+					</StackPanel>
+				</GroupBox>
+				<GroupBox>
+					<StackPanel Orientation="Horizontal">
+						<RadioButton Content="Grad" GroupName="Winkel" Margin="4,2" IsChecked="True"/>
+						<RadioButton Content="Bogenmaß" GroupName="Winkel" Margin="4,2"/>
+						<RadioButton Content="Neugrad" GroupName="Winkel" Margin="4,2" IsEnabled="False"/>
+					</StackPanel>
+				</GroupBox>
+			</DockPanel>
+
+			<!-- Inv/Hyp, Anzeigefelder, Löschtasten -->
+			<DockPanel Margin="2,0,2,6">
+				<Border DockPanel.Dock="Left" BorderBrush="#ACA899" BorderThickness="1"
+                        CornerRadius="3" Padding="4,2">
+					<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+						<CheckBox x:Name="Inv" Content="Inv" Margin="2,0,10,0"/>
+						<CheckBox x:Name="Hyp" Content="Hyp" Margin="2,0" IsEnabled="False"/>
+					</StackPanel>
+				</Border>
+				<Border x:Name="SpeicherAnzeige" DockPanel.Dock="Left" Width="30" Height="24"
+                        Margin="10,0,0,0" BorderBrush="#ACA899" BorderThickness="1"/>
+				<Border x:Name="KlammerAnzeige" DockPanel.Dock="Left" Width="30" Height="24"
+                        Margin="8,0,0,0" BorderBrush="#ACA899" BorderThickness="1"/>
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+					<Button Content="Backspace" Tag="Backspace" Width="72" Style="{StaticResource Operator}"/>
+					<Button Content="CE" Tag="CE" Width="72" Style="{StaticResource Operator}"/>
+					<Button Content="C" Tag="Clear" Width="72" Style="{StaticResource Operator}"/>
+				</StackPanel>
+			</DockPanel>
+
+			<!-- Tastenfeld -->
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<!-- 0  Statistik -->
+					<ColumnDefinition Width="8"/>
+					<!-- 1  Abstand -->
+					<ColumnDefinition Width="Auto"/>
+					<!-- 2  Funktionen -->
+					<ColumnDefinition Width="Auto"/>
+					<!-- 3 -->
+					<ColumnDefinition Width="Auto"/>
+					<!-- 4 -->
+					<ColumnDefinition Width="8"/>
+					<!-- 5  Abstand -->
+					<ColumnDefinition Width="Auto"/>
+					<!-- 6  Speicher -->
+					<ColumnDefinition Width="8"/>
+					<!-- 7  Abstand -->
+					<ColumnDefinition Width="Auto"/>
+					<!-- 8  Ziffern... -->
+					<ColumnDefinition Width="Auto"/>
+					<!-- 9 -->
+					<ColumnDefinition Width="Auto"/>
+					<!-- 10 -->
+					<ColumnDefinition Width="Auto"/>
+					<!-- 11 -->
+					<ColumnDefinition Width="Auto"/>
+					<!-- 12 -->
+					<ColumnDefinition Width="Auto"/>
+					<!-- 13 -->
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition/>
+					<RowDefinition/>
+					<RowDefinition/>
+					<RowDefinition/>
+					<RowDefinition/>
+				</Grid.RowDefinitions>
+
+				<!-- Reihe 0 -->
+				<Button Grid.Row="0" Grid.Column="0"  Content="Sta" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="0" Grid.Column="2"  Content="F-E" IsEnabled="False"/>
+				<Button Grid.Row="0" Grid.Column="3"  Content="("/>
+				<Button Grid.Row="0" Grid.Column="4"  Content=")"/>
+				<Button Grid.Row="0" Grid.Column="6"  Content="MC" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="0" Grid.Column="8"  Content="7" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="0" Grid.Column="9"  Content="8" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="0" Grid.Column="10" Content="9" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="0" Grid.Column="11" Content="/" Style="{StaticResource Operator}"/>
+				<Button Grid.Row="0" Grid.Column="12" Content="Mod" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="0" Grid.Column="13" Content="And" Style="{StaticResource Operator}" IsEnabled="False"/>
+
+				<!-- Reihe 1 -->
+				<Button Grid.Row="1" Grid.Column="0"  Content="Ave" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="1" Grid.Column="2"  Content="dms" IsEnabled="False"/>
+				<Button Grid.Row="1" Grid.Column="3"  Content="Exp" IsEnabled="False"/>
+				<Button Grid.Row="1" Grid.Column="4"  Content="ln"/>
+				<Button Grid.Row="1" Grid.Column="6"  Content="MR" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="1" Grid.Column="8"  Content="4" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="1" Grid.Column="9"  Content="5" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="1" Grid.Column="10" Content="6" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="1" Grid.Column="11" Content="*" Style="{StaticResource Operator}"/>
+				<Button Grid.Row="1" Grid.Column="12" Content="Or" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="1" Grid.Column="13" Content="Xor" Style="{StaticResource Operator}" IsEnabled="False"/>
+
+				<!-- Reihe 2 -->
+				<Button Grid.Row="2" Grid.Column="0"  Content="Sum" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="2" Grid.Column="2"  Content="sin"/>
+				<Button Grid.Row="2" Grid.Column="3"  Content="x^y"/>
+				<Button Grid.Row="2" Grid.Column="4"  Content="log"/>
+				<Button Grid.Row="2" Grid.Column="6"  Content="MS" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="2" Grid.Column="8"  Content="1" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="2" Grid.Column="9"  Content="2" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="2" Grid.Column="10" Content="3" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="2" Grid.Column="11" Content="-" Style="{StaticResource Operator}"/>
+				<Button Grid.Row="2" Grid.Column="12" Content="Lsh" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="2" Grid.Column="13" Content="Not" Style="{StaticResource Operator}" IsEnabled="False"/>
+
+				<!-- Reihe 3 -->
+				<Button Grid.Row="3" Grid.Column="0"  Content="s" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="3" Grid.Column="2"  Content="cos"/>
+				<Button Grid.Row="3" Grid.Column="3"  Content="x^3" IsEnabled="False"/>
+				<Button Grid.Row="3" Grid.Column="4"  Content="n!" IsEnabled="False"/>
+				<Button Grid.Row="3" Grid.Column="6"  Content="M+" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="3" Grid.Column="8"  Content="0" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="3" Grid.Column="9"  Content="+/-" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="3" Grid.Column="10" Content="," Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="3" Grid.Column="11" Content="+" Style="{StaticResource Operator}"/>
+				<Button Grid.Row="3" Grid.Column="12" Content="=" Style="{StaticResource Operator}"/>
+				<Button Grid.Row="3" Grid.Column="13" Content="Int" Style="{StaticResource Operator}" IsEnabled="False"/>
+
+				<!-- Reihe 4 -->
+				<Button Grid.Row="4" Grid.Column="0"  Content="Dat" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="4" Grid.Column="2"  Content="tan"/>
+				<Button Grid.Row="4" Grid.Column="3"  Content="x^2"/>
+				<Button Grid.Row="4" Grid.Column="4"  Content="1/x" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="6"  Content="pi" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="4" Grid.Column="8"  Content="A" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="9"  Content="B" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="10" Content="C" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="11" Content="D" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="12" Content="E" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="13" Content="F" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+			</Grid>
+		</StackPanel>
+	</DockPanel>
 </Window>
