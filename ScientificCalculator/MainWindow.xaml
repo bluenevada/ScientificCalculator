@@ -96,7 +96,7 @@
 				</GroupBox>
 				<GroupBox>
 					<StackPanel Orientation="Horizontal">
-						<RadioButton Content="Grad" GroupName="Winkel" Margin="4,2" IsChecked="True"/>
+						<RadioButton x:Name="RadioGrad" Content="Grad" GroupName="Winkel" Margin="4,2" IsChecked="True"/>
 						<RadioButton Content="Bogenmaß" GroupName="Winkel" Margin="4,2"/>
 						<RadioButton Content="Neugrad" GroupName="Winkel" Margin="4,2" IsEnabled="False"/>
 					</StackPanel>

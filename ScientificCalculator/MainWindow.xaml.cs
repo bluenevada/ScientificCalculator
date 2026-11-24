@@ -56,7 +56,7 @@ namespace ScientificCalculator
             string text = Eingabe.Text;
 
             // Steht schon ein Operator am Ende? Dann ersetzen
-            if (text.Length > 0 && "+-*/".Contains(text[text.Length - 1]))
+            if (text.Length > 0 && "+-*/^".Contains(text[text.Length - 1]))
                 text = text.Substring(0, text.Length - 1);
 
             // Am Anfang oder nach "(" ist nur Minus (als Vorzeichen) erlaubt
@@ -80,7 +80,7 @@ namespace ScientificCalculator
         // Hilfsmethode: Teil nach dem letzten Operator, also die Zahl, die gerade getippt wird
         private string LetzteZahl()
         {
-            int pos = Eingabe.Text.LastIndexOfAny(new[] { '+', '-', '*', '/', '(', ')' });
+            int pos = Eingabe.Text.LastIndexOfAny(new[] { '+', '-', '*', '/', '^', '(', ')' });
             return Eingabe.Text.Substring(pos + 1);
         }
 
@@ -104,7 +104,8 @@ namespace ScientificCalculator
             if (Eingabe.Text == "") return;
             try
             {
-                double ergebnis = rechner.Evaluate(Eingabe.Text);
+                rechner.Gradmass = RadioGrad.IsChecked == true;
+                double ergebnis = Math.Round(rechner.Evaluate(Eingabe.Text), 10);
                 Ergebnis.Text = ergebnis.ToString(new CultureInfo("de-DE"));
             }
             catch
@@ -117,17 +118,31 @@ namespace ScientificCalculator
         private void VorzeichenWechseln()
         {
             string text = Eingabe.Text;
-            int start = text.LastIndexOfAny(new[] { '+', '-', '*', '/', '(', ')' }) + 1;
+            int start = text.LastIndexOfAny(new[] { '+', '-', '*', '/', '^', '(', ')' }) + 1;
             if (start >= text.Length) return;   // am Ende steht keine Zahl
 
             int minusPos = start - 1;
             bool hatVorzeichen = minusPos >= 0 && text[minusPos] == '-' &&
-                                 (minusPos == 0 || "+-*/(".Contains(text[minusPos - 1]));
+                                 (minusPos == 0 || "+-*/^(".Contains(text[minusPos - 1]));
 
             if (hatVorzeichen)
                 Eingabe.Text = text.Remove(minusPos, 1);   // "-5" → "5"
             else
                 Eingabe.Text = text.Insert(start, "-");    // "5" → "-5"
+        }
+
+        // Hilfsmethoden
+        private void FunktionEingeben(string name)
+        {
+            Eingabe.Text += name + "(";
+        }
+
+        // Liest die Inv-Checkbox und hakt sie danach ab, wie beim XP-Rechner
+        private bool InvAktiv()
+        {
+            bool aktiv = Inv.IsChecked == true;
+            Inv.IsChecked = false;
+            return aktiv;
         }
     }
 }
