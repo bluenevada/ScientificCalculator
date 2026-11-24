@@ -8,14 +8,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Globalization;
 
 namespace ScientificCalculator
 {
-    /// <summary>
+    
     /// Interaction logic for MainWindow.xaml
    
     public partial class MainWindow : Window
     {
+        private readonly Calculator rechner = new Calculator();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -32,6 +35,10 @@ namespace ScientificCalculator
                 case "CE":
                 case "Backspace": ZeichenLoeschen(); break;
                 case "Clear": AllesLoeschen(); break;
+                case "=": Berechnen(); break;
+                case "(":
+                case ")": Eingabe.Text += aktion; break;
+                case "+/-": VorzeichenWechseln(); break;
                 case ",": KommaEingeben(); break;
                 case "+":
                 case "-":
@@ -46,11 +53,19 @@ namespace ScientificCalculator
 
         private void OperatorEingeben(string op)
         {
-            if (Eingabe.Text == "") return;                 // kein Operator am Anfang
-            char letztes = Eingabe.Text[Eingabe.Text.Length - 1];
-            if ("+-*/".Contains(letztes))                   // zwei Operatoren hintereinander?
-                Eingabe.Text = Eingabe.Text.Substring(0, Eingabe.Text.Length - 1);
-            Eingabe.Text += op;
+            string text = Eingabe.Text;
+
+            // Steht schon ein Operator am Ende? Dann ersetzen
+            if (text.Length > 0 && "+-*/".Contains(text[text.Length - 1]))
+                text = text.Substring(0, text.Length - 1);
+
+            // Am Anfang oder nach "(" ist nur Minus (als Vorzeichen) erlaubt
+            if ((text == "" || text.EndsWith("(")) && op != "-")
+            {
+                Eingabe.Text = text;
+                return;
+            }
+            Eingabe.Text = text + op;
         }
 
         // Sub-Issue: Dezimalkomma
@@ -65,7 +80,7 @@ namespace ScientificCalculator
         // Hilfsmethode: Teil nach dem letzten Operator, also die Zahl, die gerade getippt wird
         private string LetzteZahl()
         {
-            int pos = Eingabe.Text.LastIndexOfAny(new[] { '+', '-', '*', '/' });
+            int pos = Eingabe.Text.LastIndexOfAny(new[] { '+', '-', '*', '/', '(', ')' });
             return Eingabe.Text.Substring(pos + 1);
         }
 
@@ -81,6 +96,38 @@ namespace ScientificCalculator
         {
             Eingabe.Text = "";
             Ergebnis.Text = "0";
+        }
+
+        // Sub-Issue: Berechnung
+        private void Berechnen()
+        {
+            if (Eingabe.Text == "") return;
+            try
+            {
+                double ergebnis = rechner.Evaluate(Eingabe.Text);
+                Ergebnis.Text = ergebnis.ToString(new CultureInfo("de-DE"));
+            }
+            catch
+            {
+                Ergebnis.Text = "Fehler";   // wird verbessert
+            }
+        }
+
+        // Sub-Issue: ±-Taste – dreht das Vorzeichen der letzten Zahl um
+        private void VorzeichenWechseln()
+        {
+            string text = Eingabe.Text;
+            int start = text.LastIndexOfAny(new[] { '+', '-', '*', '/', '(', ')' }) + 1;
+            if (start >= text.Length) return;   // am Ende steht keine Zahl
+
+            int minusPos = start - 1;
+            bool hatVorzeichen = minusPos >= 0 && text[minusPos] == '-' &&
+                                 (minusPos == 0 || "+-*/(".Contains(text[minusPos - 1]));
+
+            if (hatVorzeichen)
+                Eingabe.Text = text.Remove(minusPos, 1);   // "-5" → "5"
+            else
+                Eingabe.Text = text.Insert(start, "-");    // "5" → "-5"
         }
     }
 }
