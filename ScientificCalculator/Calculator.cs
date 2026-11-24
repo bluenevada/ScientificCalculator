@@ -13,9 +13,28 @@ namespace ScientificCalculator
 
         public double Evaluate(string ausdruck)
         {
-            List<string> tokens = Tokenize(ausdruck);
-            List<string> upn = ToRpn(tokens);
-            return EvaluateRpn(upn);
+            double ergebnis;
+            try
+            {
+                List<string> tokens = Tokenize(ausdruck);
+                List<string> upn = ToRpn(tokens);
+                ergebnis = EvaluateRpn(upn);
+            }
+            catch (InvalidOperationException)   // Stapel leer, z. B. bei "5+"
+            {
+                throw new RechenFehler("Ungültiger Ausdruck.");
+            }
+            catch (FormatException)             // Zahl nicht lesbar
+            {
+                throw new RechenFehler("Ungültige Zahl.");
+            }
+
+            if (double.IsNaN(ergebnis))
+                throw new RechenFehler("Ergebnis ist nicht definiert.");
+            if (double.IsInfinity(ergebnis))
+                throw new RechenFehler("Ergebnis ist zu groß.");
+
+            return ergebnis;
         }
 
         // ---------- Tokenizer ----------
@@ -104,7 +123,7 @@ namespace ScientificCalculator
                         ausgabe.Add(stapel.Pop());
 
                     if (stapel.Count == 0)
-                        throw new Exception("Es fehlt eine öffnende Klammer \"(\".");
+                        throw new RechenFehler("Es fehlt eine öffnende Klammer \"(\".");
                     stapel.Pop();   // "(" wegwerfen
 
                     // Gehörte die Klammer zu einer Funktion? Dann jetzt ausgeben
@@ -130,7 +149,7 @@ namespace ScientificCalculator
             {
                 string rest = stapel.Pop();
                 if (rest == "(" || IstFunktion(rest))
-                    throw new Exception("Es fehlt eine schließende Klammer \")\".");
+                    throw new RechenFehler("Es fehlt eine schließende Klammer \")\".");
                 ausgabe.Add(rest);
             }
             return ausgabe;
@@ -164,7 +183,10 @@ namespace ScientificCalculator
                         case "+": stapel.Push(a + b); break;
                         case "-": stapel.Push(a - b); break;
                         case "*": stapel.Push(a * b); break;
-                        case "/": stapel.Push(a / b); break;
+                        case "/":
+                            if (b == 0) throw new RechenFehler("Division durch 0 ist nicht möglich.");
+                            stapel.Push(a / b);
+                            break;
                         case "^": stapel.Push(Math.Pow(a, b)); break;
                     }
                 }
@@ -175,7 +197,7 @@ namespace ScientificCalculator
             }
 
             if (stapel.Count != 1)
-                throw new Exception("Ungültiger Ausdruck.");
+                throw new RechenFehler("Ungültiger Ausdruck.");
             return stapel.Pop();
         }
 
@@ -186,12 +208,21 @@ namespace ScientificCalculator
             {
                 case "sin": return Math.Sin(InBogenmass(x));
                 case "cos": return Math.Cos(InBogenmass(x));
-                case "tan": return Math.Tan(InBogenmass(x));
-                case "log": return Math.Log10(x);
-                case "ln": return Math.Log(x);
-                case "√": return Math.Sqrt(x);
+                case "tan":
+                    if (Math.Abs(Math.Cos(InBogenmass(x))) < 1e-12)
+                        throw new RechenFehler("tan ist bei 90° (bzw. π/2) nicht definiert.");
+                    return Math.Tan(InBogenmass(x));
+                case "log":
+                case "ln":
+                    if (x <= 0)
+                        throw new RechenFehler("Logarithmus ist nur für Zahlen größer 0 definiert.");
+                    return name == "log" ? Math.Log10(x) : Math.Log(x);
+                case "√":
+                    if (x < 0)
+                        throw new RechenFehler("Wurzel aus einer negativen Zahl ist nicht definiert.");
+                    return Math.Sqrt(x);
                 case "exp": return Math.Exp(x);
-                default: throw new Exception("Unbekannte Funktion: " + name);
+                default: throw new RechenFehler("Unbekannte Funktion: " + name);
             }
         }
 
@@ -200,5 +231,11 @@ namespace ScientificCalculator
         {
             return Gradmass ? x * Math.PI / 180 : x;
         }
+    }
+
+    // Eigene Exception für verständliche Rechenfehler
+    public class RechenFehler : Exception
+    {
+        public RechenFehler(string meldung) : base(meldung) { }
     }
 }

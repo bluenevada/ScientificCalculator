@@ -35,10 +35,21 @@ namespace ScientificCalculator
                 case "CE":
                 case "Backspace": ZeichenLoeschen(); break;
                 case "Clear": AllesLoeschen(); break;
-                case "=": Berechnen(); break;
+                case "=": Berechnen(); break;              
                 case "(":
                 case ")": Eingabe.Text += aktion; break;
                 case "+/-": VorzeichenWechseln(); break;
+                case "sin":
+                case "cos":
+                case "tan":
+                case "log": FunktionEingeben(aktion); break;
+                case "ln": FunktionEingeben(InvAktiv() ? "exp" : "ln"); break;
+                case "x^2":
+                    if (InvAktiv()) FunktionEingeben("√");
+                    else Eingabe.Text += "^2";
+                    break;
+                case "x^y": OperatorEingeben("^"); break;
+                case "pi": Eingabe.Text += "π"; break;
                 case ",": KommaEingeben(); break;
                 case "+":
                 case "-":
@@ -108,9 +119,13 @@ namespace ScientificCalculator
                 double ergebnis = Math.Round(rechner.Evaluate(Eingabe.Text), 10);
                 Ergebnis.Text = ergebnis.ToString(new CultureInfo("de-DE"));
             }
-            catch
+            catch (RechenFehler fehler)
             {
-                Ergebnis.Text = "Fehler";   // wird verbessert
+                Ergebnis.Text = fehler.Message;          // unsere verständlichen Meldungen
+            }
+            catch (Exception)
+            {
+                Ergebnis.Text = "Unerwarteter Fehler.";  // alles, womit wir nicht gerechnet haben
             }
         }
 
