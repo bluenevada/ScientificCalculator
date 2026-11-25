@@ -22,6 +22,7 @@ namespace ScientificCalculator.Tests
         [DataRow("7/2", 3.5)]
         [DataRow("1,5*2", 3.0)]
         [DataRow("8/2*4", 16.0)]
+        [DataRow("7,5/2", 3.75)]
         public void Grundrechenarten(string ausdruck, double erwartet)
         {
             Assert.AreEqual(erwartet, rechner.Evaluate(ausdruck), 1e-9);
@@ -66,6 +67,9 @@ namespace ScientificCalculator.Tests
         [DataRow("20%", 0.2)]
         [DataRow("50*20%", 10.0)]
         [DataRow("200+10%", 200.1)]
+        [DataRow("2^3", 8.0)]
+        [DataRow("log(100)", 2.0)]
+        [DataRow("ln(exp(1))", 1.0)]
         public void FunktionenImGradmass(string ausdruck, double erwartet)
         {
             Assert.AreEqual(erwartet, rechner.Evaluate(ausdruck), 1e-9);
