@@ -152,4 +152,11 @@ namespace ScientificCalculator
             return ergebnis;
         }
     }
+
+    public class Prozent : Funktion
+    {
+        public override string Name => "%";
+        public override bool IstPostfix => true;   // steht HINTER der Zahl
+        public override double Berechne(double x, bool gradmass) => x / 100;
+    }
 }

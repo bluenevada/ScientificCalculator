@@ -68,6 +68,7 @@ namespace ScientificCalculator
                 case "-":
                 case "*":
                 case "/": OperatorEingeben(aktion); break;
+                case "%": Eingabe.Text += "%"; break;
                 case "MC":
                 case "MR":
                 case "MS":

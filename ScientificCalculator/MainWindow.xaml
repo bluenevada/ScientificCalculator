@@ -178,7 +178,7 @@
 				<Button Grid.Row="0" Grid.Column="9"  Content="8" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="0" Grid.Column="10" Content="9" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="0" Grid.Column="11" Content="/" Style="{StaticResource Operator}"/>
-				<Button Grid.Row="0" Grid.Column="12" Content="Mod" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="0" Grid.Column="12" Content="%" Style="{StaticResource Operator}"/>
 				<Button Grid.Row="0" Grid.Column="13" Content="And" Style="{StaticResource Operator}" IsEnabled="False"/>
 
 				<!-- Reihe 1 -->
