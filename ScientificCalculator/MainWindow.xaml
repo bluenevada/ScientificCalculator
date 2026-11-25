@@ -205,8 +205,8 @@
 				<!-- Reihe 3 -->
 				<Button Grid.Row="3" Grid.Column="0"  Content="s" Style="{StaticResource Ziffer}" IsEnabled="False"/>
 				<Button Grid.Row="3" Grid.Column="2"  Content="cos"/>
-				<Button Grid.Row="3" Grid.Column="3"  Content="x^3" IsEnabled="False"/>
-				<Button Grid.Row="3" Grid.Column="4"  Content="n!" IsEnabled="False"/>
+				<Button Grid.Row="3" Grid.Column="3"  Content="x^3"/>
+				<Button Grid.Row="3" Grid.Column="4"  Content="n!"/>
 				<Button Grid.Row="3" Grid.Column="6"  Content="M+" Style="{StaticResource Operator}" IsEnabled="False"/>
 				<Button Grid.Row="3" Grid.Column="8"  Content="0" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="3" Grid.Column="9"  Content="+/-" Style="{StaticResource Ziffer}"/>
@@ -219,7 +219,7 @@
 				<Button Grid.Row="4" Grid.Column="0"  Content="Dat" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="4" Grid.Column="2"  Content="tan"/>
 				<Button Grid.Row="4" Grid.Column="3"  Content="x^2"/>
-				<Button Grid.Row="4" Grid.Column="4"  Content="1/x" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="4"  Content="1/x"/>
 				<Button Grid.Row="4" Grid.Column="6"  Content="pi" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="4" Grid.Column="8"  Content="A" Style="{StaticResource Ziffer}" IsEnabled="False"/>
 				<Button Grid.Row="4" Grid.Column="9"  Content="B" Style="{StaticResource Ziffer}" IsEnabled="False"/>

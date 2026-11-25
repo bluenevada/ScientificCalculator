@@ -11,6 +11,23 @@ namespace ScientificCalculator
         // true = Grad (DEG), false = Bogenmaß (RAD)
         public bool Gradmass { get; set; } = true;
 
+        // Alle bekannten Funktionen, nachschlagbar über ihren Namen
+        private readonly Dictionary<string, Funktion> funktionen = new Dictionary<string, Funktion>();
+
+        public Calculator()
+        {
+            Funktion[] alle =
+            {
+        new Sinus(), new Kosinus(), new Tangens(),
+        new Arkussinus(), new Arkuskosinus(), new Arkustangens(),
+        new Logarithmus(), new NatuerlicherLogarithmus(),
+        new Wurzel(), new Kubikwurzel(), new Exponentialfunktion(),
+        new Fakultaet()
+    };
+            foreach (Funktion f in alle)
+                funktionen[f.Name] = f;
+        }
+
         public double Evaluate(string ausdruck)
         {
             double ergebnis;
@@ -51,7 +68,7 @@ namespace ScientificCalculator
                     zahl += zeichen;
                     continue;
                 }
-                if ((char.IsLetter(zeichen) && zeichen != 'π') || zeichen == '√')
+                if ((char.IsLetter(zeichen) && zeichen != 'π') || zeichen == '√' || zeichen == '∛')
                 {
                     wort += zeichen;
                     continue;
@@ -87,8 +104,7 @@ namespace ScientificCalculator
 
         private bool IstFunktion(string token)
         {
-            return token == "sin" || token == "cos" || token == "tan" ||
-                   token == "log" || token == "ln" || token == "√" || token == "exp";
+            return funktionen.ContainsKey(token);
         }
 
         private int Rang(string op)
@@ -113,7 +129,12 @@ namespace ScientificCalculator
 
             foreach (string token in tokens)
             {
-                if (token == "(" || token == "neg" || IstFunktion(token))
+                // Postfix-Funktion (z. B. "!") gilt für das, was direkt davor steht
+                if (IstFunktion(token) && funktionen[token].IstPostfix)
+                {
+                    ausgabe.Add(token);
+                }
+                else if (token == "(" || token == "neg" || IstFunktion(token))
                 {
                     stapel.Push(token);
                 }
@@ -172,7 +193,8 @@ namespace ScientificCalculator
                 }
                 else if (IstFunktion(token))
                 {
-                    stapel.Push(Funktion(token, stapel.Pop()));
+                    // Welche Klasse dahintersteckt, entscheidet sich erst hier zur Laufzeit
+                    stapel.Push(funktionen[token].Berechne(stapel.Pop(), Gradmass));
                 }
                 else if (IstOperator(token))
                 {
@@ -199,37 +221,6 @@ namespace ScientificCalculator
             if (stapel.Count != 1)
                 throw new RechenFehler("Ungültiger Ausdruck.");
             return stapel.Pop();
-        }
-
-        // die wissenschaftlichen Funktionen
-        private double Funktion(string name, double x)
-        {
-            switch (name)
-            {
-                case "sin": return Math.Sin(InBogenmass(x));
-                case "cos": return Math.Cos(InBogenmass(x));
-                case "tan":
-                    if (Math.Abs(Math.Cos(InBogenmass(x))) < 1e-12)
-                        throw new RechenFehler("tan ist bei 90° (bzw. π/2) nicht definiert.");
-                    return Math.Tan(InBogenmass(x));
-                case "log":
-                case "ln":
-                    if (x <= 0)
-                        throw new RechenFehler("Logarithmus ist nur für Zahlen größer 0 definiert.");
-                    return name == "log" ? Math.Log10(x) : Math.Log(x);
-                case "√":
-                    if (x < 0)
-                        throw new RechenFehler("Wurzel aus einer negativen Zahl ist nicht definiert.");
-                    return Math.Sqrt(x);
-                case "exp": return Math.Exp(x);
-                default: throw new RechenFehler("Unbekannte Funktion: " + name);
-            }
-        }
-
-        // Im DEG-Modus vor sin/cos/tan in Bogenmaß umrechnen
-        private double InBogenmass(double x)
-        {
-            return Gradmass ? x * Math.PI / 180 : x;
         }
     }
 

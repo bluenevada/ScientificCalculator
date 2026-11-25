@@ -41,8 +41,14 @@ namespace ScientificCalculator
                 case "+/-": VorzeichenWechseln(); break;
                 case "sin":
                 case "cos":
-                case "tan":
+                case "tan": FunktionEingeben(InvAktiv() ? "a" + aktion : aktion); break;
                 case "log": FunktionEingeben(aktion); break;
+                case "x^3":
+                    if (InvAktiv()) FunktionEingeben("∛");
+                    else Eingabe.Text += "^3";
+                    break;
+                case "n!": Eingabe.Text += "!"; break;
+                case "1/x": Eingabe.Text += "^-1"; break;
                 case "ln": FunktionEingeben(InvAktiv() ? "exp" : "ln"); break;
                 case "x^2":
                     if (InvAktiv()) FunktionEingeben("√");
