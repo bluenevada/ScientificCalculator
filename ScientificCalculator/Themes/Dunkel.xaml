@@ -1,0 +1,30 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Fenster und Text -->
+    <SolidColorBrush x:Key="FensterHintergrund" Color="#2B2B2B"/>
+    <SolidColorBrush x:Key="TextFarbe"          Color="#E0E0E0"/>
+    <SolidColorBrush x:Key="RahmenFarbe"        Color="#555555"/>
+
+    <!-- Anzeige -->
+    <SolidColorBrush x:Key="AnzeigeHintergrund" Color="#1E1E1E"/>
+    <SolidColorBrush x:Key="AnzeigeRand"        Color="#555555"/>
+    <SolidColorBrush x:Key="RechnungFarbe"      Color="#9A9A9A"/>
+
+    <!-- Tasten -->
+    <LinearGradientBrush x:Key="TasteHintergrund" StartPoint="0,0" EndPoint="0,1">
+        <GradientStop Color="#4A4A4A" Offset="0"/>
+        <GradientStop Color="#3C3C3C" Offset="0.85"/>
+        <GradientStop Color="#303030" Offset="1"/>
+    </LinearGradientBrush>
+    <SolidColorBrush x:Key="TasteGedrueckt"       Color="#252525"/>
+    <SolidColorBrush x:Key="TasteRand"            Color="#606060"/>
+    <SolidColorBrush x:Key="TasteRandHover"       Color="#F8B330"/>
+    <SolidColorBrush x:Key="TasteRandDeaktiviert" Color="#444444"/>
+
+    <!-- Schriftfarben der Tasten (heller, damit sie auf Dunkel lesbar sind) -->
+    <SolidColorBrush x:Key="FarbeZiffer"      Color="#6CB6FF"/>
+    <SolidColorBrush x:Key="FarbeOperator"    Color="#FF6B6B"/>
+    <SolidColorBrush x:Key="FarbeFunktion"    Color="#D38CFF"/>
+    <SolidColorBrush x:Key="FarbeDeaktiviert" Color="#6A6A6A"/>
+</ResourceDictionary>
+    

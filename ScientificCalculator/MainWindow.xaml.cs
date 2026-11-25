@@ -295,5 +295,16 @@ namespace ScientificCalculator
             if (VerlaufListe.SelectedItem is VerlaufEintrag eintrag)
                 WertEinfuegen(eintrag.Ergebnis);
         }
+
+        private void Design_Umschalten(object sender, RoutedEventArgs e)
+        {
+            string datei = MenuDunkel.IsChecked ? "Dunkel" : "Hell";
+
+            // Das Theme im "Steckplatz" austauschen, alle DynamicResources färben sich neu
+            Resources.MergedDictionaries[0] = new ResourceDictionary
+            {
+                Source = new Uri($"pack://application:,,,/Themes/{datei}.xaml")
+            };
+        }
     }
 }
