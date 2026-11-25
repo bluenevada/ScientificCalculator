@@ -8,7 +8,7 @@ namespace ScientificCalculator
     {
         private readonly CultureInfo deutsch = new CultureInfo("de-DE");
 
-        // #7: true = Grad (DEG), false = Bogenmaß (RAD)
+        // true = Grad (DEG), false = Bogenmaß (RAD)
         public bool Gradmass { get; set; } = true;
 
         public double Evaluate(string ausdruck)
@@ -37,7 +37,7 @@ namespace ScientificCalculator
             return ergebnis;
         }
 
-        // ---------- Tokenizer ----------
+        // Tokenizer
         private List<string> Tokenize(string ausdruck)
         {
             var tokens = new List<string>();
@@ -105,7 +105,7 @@ namespace ScientificCalculator
             }
         }
 
-        // ---------- Shunting-yard ----------
+        // Shunting-yard
         private List<string> ToRpn(List<string> tokens)
         {
             var ausgabe = new List<string>();
@@ -155,7 +155,7 @@ namespace ScientificCalculator
             return ausgabe;
         }
 
-        // ---------- UPN auswerten ----------
+        // UPN auswerten
         private double EvaluateRpn(List<string> upn)
         {
             var stapel = new Stack<double>();
@@ -201,7 +201,7 @@ namespace ScientificCalculator
             return stapel.Pop();
         }
 
-        // #6: die wissenschaftlichen Funktionen
+        // die wissenschaftlichen Funktionen
         private double Funktion(string name, double x)
         {
             switch (name)
@@ -226,7 +226,7 @@ namespace ScientificCalculator
             }
         }
 
-        // #7: Im DEG-Modus vor sin/cos/tan in Bogenmaß umrechnen
+        // Im DEG-Modus vor sin/cos/tan in Bogenmaß umrechnen
         private double InBogenmass(double x)
         {
             return Gradmass ? x * Math.PI / 180 : x;
