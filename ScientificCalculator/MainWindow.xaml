@@ -236,17 +236,17 @@
 				<Button Grid.Row="3" Grid.Column="13" Content="Int" Style="{StaticResource Operator}" IsEnabled="False"/>
 
 				<!-- Reihe 4 -->
-				<Button Grid.Row="4" Grid.Column="0"  Content="Dat" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="4" Grid.Column="0"  Content="Dat" Style="{StaticResource Ziffer}" IsEnabled="False"/>
 				<Button Grid.Row="4" Grid.Column="2"  Content="tan"/>
 				<Button Grid.Row="4" Grid.Column="3"  Content="x^2"/>
 				<Button Grid.Row="4" Grid.Column="4"  Content="1/x"/>
-				<Button Grid.Row="4" Grid.Column="6"  Content="pi" Style="{StaticResource Ziffer}"/>
-				<Button Grid.Row="4" Grid.Column="8"  Content="A" Style="{StaticResource Ziffer}"/>
-				<Button Grid.Row="4" Grid.Column="9"  Content="B" Style="{StaticResource Ziffer}"/>
-				<Button Grid.Row="4" Grid.Column="10" Content="C" Style="{StaticResource Ziffer}"/>
-				<Button Grid.Row="4" Grid.Column="11" Content="D" Style="{StaticResource Ziffer}"/>
-				<Button Grid.Row="4" Grid.Column="12" Content="E" Style="{StaticResource Ziffer}"/>
-				<Button Grid.Row="4" Grid.Column="13" Content="F" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="4" Grid.Column="6"  Content="pi" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="8"  Content="A" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="9"  Content="B" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="10" Content="C" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="11" Content="D" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="12" Content="E" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="13" Content="F" Style="{StaticResource Ziffer}" IsEnabled="False"/>
 			</Grid>
 		</StackPanel>
 	</DockPanel>
