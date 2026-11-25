@@ -31,13 +31,18 @@ namespace ScientificCalculator
         {
             var taste = (Button)sender;
             string aktion = taste.Tag as string ?? taste.Content.ToString();
+            TasteAusfuehren(aktion);
+        }
 
+        // Wird von Maus UND Tastatur aufgerufen
+        private void TasteAusfuehren(string aktion)
+        {
             switch (aktion)
             {
                 case "CE":
                 case "Backspace": ZeichenLoeschen(); break;
                 case "Clear": AllesLoeschen(); break;
-                case "=": Berechnen(); break;              
+                case "=": Berechnen(); break;
                 case "(":
                 case ")": Eingabe.Text += aktion; break;
                 case "+/-": VorzeichenWechseln(); break;
@@ -202,6 +207,69 @@ namespace ScientificCalculator
             string text = wert.ToString(new CultureInfo("de-DE"));
             if (wert < 0) text = "(" + text + ")";
             Eingabe.Text += text;
+        }
+
+        // Sondertasten und Strg-Kombinationen
+        private void Fenster_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            string aktion = null;
+
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                switch (e.Key)
+                {
+                    case Key.M: aktion = "MS"; break;
+                    case Key.R: aktion = "MR"; break;
+                    case Key.L: aktion = "MC"; break;
+                    case Key.P: aktion = "M+"; break;
+                }
+            }
+            else
+            {
+                switch (e.Key)
+                {
+                    case Key.Enter: aktion = "="; break;
+                    case Key.Back: aktion = "Backspace"; break;
+                    case Key.Delete: aktion = "CE"; break;
+                    case Key.Escape: aktion = "Clear"; break;
+                    case Key.F9: aktion = "+/-"; break;
+                }
+            }
+
+            if (aktion != null)
+            {
+                TasteAusfuehren(aktion);
+                e.Handled = true;   // Taste ist erledigt, nicht weiterreichen
+            }
+        }
+
+        // Getippte Zeichen (Ziffern, Operatoren, Buchstaben-Kürzel)
+        private void Fenster_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            string aktion;
+            switch (e.Text)
+            {
+                case ".": aktion = ","; break;   // Punkt vom Ziffernblock
+                case "y":
+                case "^": aktion = "x^y"; break;
+                case "@": aktion = "x^2"; break;
+                case "#": aktion = "x^3"; break;
+                case "!": aktion = "n!"; break;
+                case "r": aktion = "1/x"; break;
+                case "s": aktion = "sin"; break;
+                case "o": aktion = "cos"; break;
+                case "t": aktion = "tan"; break;
+                case "l": aktion = "log"; break;
+                case "n": aktion = "ln"; break;
+                case "p": aktion = "pi"; break;
+                case "i":
+                    Inv.IsChecked = !(Inv.IsChecked == true);   // Inv umschalten
+                    e.Handled = true;
+                    return;
+                default: aktion = e.Text; break;   // Ziffern, + - * / ( ) , =
+            }
+            TasteAusfuehren(aktion);
+            e.Handled = true;
         }
     }
 }

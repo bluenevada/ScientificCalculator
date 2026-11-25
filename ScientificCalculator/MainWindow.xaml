@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Rechner"
         SizeToContent="WidthAndHeight" ResizeMode="CanMinimize"
-        Background="#ECE9D8" FontFamily="Tahoma" FontSize="12">
+        Background="#ECE9D8" PreviewKeyDown="Fenster_PreviewKeyDown"
+		PreviewTextInput="Fenster_PreviewTextInput" 
+		FontFamily="Tahoma" FontSize="12">
 
 	<Window.Resources>
 		<!-- Grundstil: XP-Taste -->
@@ -11,6 +13,7 @@
 			<Setter Property="Width" Value="36"/>
 			<Setter Property="Height" Value="28"/>
 			<Setter Property="Margin" Value="2"/>
+			<Setter Property="Focusable" Value="False"/>
 			<EventSetter Event="Click" Handler="Taste_Click"/>
 			<Setter Property="Template">
 				<Setter.Value>
@@ -113,7 +116,7 @@
 					</StackPanel>
 				</Border>
 				<Border x:Name="SpeicherAnzeige" DockPanel.Dock="Left" Width="30" Height="24"
-        Margin="10,0,0,0" BorderBrush="#ACA899" BorderThickness="1">
+						Margin="10,0,0,0" BorderBrush="#ACA899" BorderThickness="1">
 					<TextBlock x:Name="SpeicherSymbol" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 				</Border>
 				<Border x:Name="KlammerAnzeige" DockPanel.Dock="Left" Width="30" Height="24"

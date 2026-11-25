@@ -18,12 +18,12 @@ namespace ScientificCalculator
         {
             Funktion[] alle =
             {
-        new Sinus(), new Kosinus(), new Tangens(),
-        new Arkussinus(), new Arkuskosinus(), new Arkustangens(),
-        new Logarithmus(), new NatuerlicherLogarithmus(),
-        new Wurzel(), new Kubikwurzel(), new Exponentialfunktion(),
-        new Fakultaet()
-    };
+                new Sinus(), new Kosinus(), new Tangens(),
+                new Arkussinus(), new Arkuskosinus(), new Arkustangens(),
+                new Logarithmus(), new NatuerlicherLogarithmus(),
+                new Wurzel(), new Kubikwurzel(), new Exponentialfunktion(),
+                new Fakultaet()
+            };
             foreach (Funktion f in alle)
                 funktionen[f.Name] = f;
         }
