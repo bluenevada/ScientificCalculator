@@ -1,3 +1,7 @@
 <Solution>
+  <Folder Name="/docs/">
+    <File Path="docs/Lasten- und Pflichtenheft Wissenschaftlicher Taschenrechner.md" />
+  </Folder>
   <Project Path="ScientificCalculator.Tests/ScientificCalculator.Tests.csproj" />
+  <Project Path="ScientificCalculator/ScientificCalculator.csproj" />
 </Solution>

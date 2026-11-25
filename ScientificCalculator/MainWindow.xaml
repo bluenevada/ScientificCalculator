@@ -71,12 +71,27 @@
 			<MenuItem Header="_Ansicht">
 				<MenuItem Header="_Standard"/>
 				<MenuItem Header="_Wissenschaftlich" IsChecked="True"/>
+				<Separator/>
+				<MenuItem x:Name="MenuVerlauf" Header="_Verlauf" IsCheckable="True" Click="Verlauf_Umschalten"/>
 			</MenuItem>
 			<MenuItem Header="_?">
 				<MenuItem Header="_Info"/>
 			</MenuItem>
 		</Menu>
-
+		
+		<!-- Verlauf (rechts, zuschaltbar) -->
+		<Border x:Name="VerlaufBereich" DockPanel.Dock="Right" Width="180" Margin="0,6,6,6"
+				Background="White" BorderBrush="#7F9DB9" BorderThickness="1"
+				Visibility="Collapsed">
+			<DockPanel>
+				<TextBlock DockPanel.Dock="Top" Text="Verlauf" FontWeight="Bold" Margin="4"/>
+				<Button DockPanel.Dock="Bottom" Content="Verlauf löschen" Tag="VerlaufLoeschen"
+						Width="Auto" Margin="4" Style="{StaticResource Operator}"/>
+				<ListBox x:Name="VerlaufListe" BorderThickness="0"
+						 MouseDoubleClick="Verlauf_DoppelKlick"/>
+			</DockPanel>
+		</Border>
+		
 		<StackPanel Margin="6">
 			<!-- Anzeige -->
 			<Border Background="White" BorderBrush="#7F9DB9" BorderThickness="1"

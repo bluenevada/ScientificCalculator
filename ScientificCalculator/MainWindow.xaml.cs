@@ -73,6 +73,7 @@ namespace ScientificCalculator
                 case "MR":
                 case "MS":
                 case "M+": SpeicherAktion(aktion); break;
+                case "VerlaufLoeschen": VerlaufListe.Items.Clear(); break;
                 default:
                     if (aktion.Length == 1 && char.IsDigit(aktion[0]))
                         Eingabe.Text += aktion;
@@ -138,6 +139,7 @@ namespace ScientificCalculator
                 double ergebnis = Math.Round(rechner.Evaluate(Eingabe.Text), 10);
                 Ergebnis.Text = ergebnis.ToString(new CultureInfo("de-DE"));
                 letztesErgebnis = ergebnis;
+                VerlaufHinzufuegen(Eingabe.Text, ergebnis);
             }
             catch (RechenFehler fehler)
             {
@@ -271,6 +273,27 @@ namespace ScientificCalculator
             }
             TasteAusfuehren(aktion);
             e.Handled = true;
+        }
+
+        private void VerlaufHinzufuegen(string rechnung, double ergebnis)
+        {
+            // Keine doppelten Einträge, z. B. wenn = zweimal gedrückt wird
+            if (VerlaufListe.Items.Count > 0 &&
+                ((VerlaufEintrag)VerlaufListe.Items[0]).Rechnung == rechnung)
+                return;
+
+            VerlaufListe.Items.Insert(0, new VerlaufEintrag(rechnung, ergebnis));   // neueste oben
+        }
+
+        private void Verlauf_Umschalten(object sender, RoutedEventArgs e)
+        {
+            VerlaufBereich.Visibility = MenuVerlauf.IsChecked ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        private void Verlauf_DoppelKlick(object sender, MouseButtonEventArgs e)
+        {
+            if (VerlaufListe.SelectedItem is VerlaufEintrag eintrag)
+                WertEinfuegen(eintrag.Ergebnis);
         }
     }
 }
