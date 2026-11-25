@@ -18,6 +18,8 @@ namespace ScientificCalculator
     public partial class MainWindow : Window
     {
         private readonly Calculator rechner = new Calculator();
+        private readonly Speicher speicher = new Speicher();
+        private double? letztesErgebnis = null;   // null = kein gültiges Ergebnis
 
         public MainWindow()
         {
@@ -61,6 +63,10 @@ namespace ScientificCalculator
                 case "-":
                 case "*":
                 case "/": OperatorEingeben(aktion); break;
+                case "MC":
+                case "MR":
+                case "MS":
+                case "M+": SpeicherAktion(aktion); break;
                 default:
                     if (aktion.Length == 1 && char.IsDigit(aktion[0]))
                         Eingabe.Text += aktion;
@@ -118,20 +124,22 @@ namespace ScientificCalculator
         // Sub-Issue: Berechnung
         private void Berechnen()
         {
+            letztesErgebnis = null;
             if (Eingabe.Text == "") return;
             try
             {
                 rechner.Gradmass = RadioGrad.IsChecked == true;
                 double ergebnis = Math.Round(rechner.Evaluate(Eingabe.Text), 10);
                 Ergebnis.Text = ergebnis.ToString(new CultureInfo("de-DE"));
+                letztesErgebnis = ergebnis;
             }
             catch (RechenFehler fehler)
             {
-                Ergebnis.Text = fehler.Message;          // unsere verständlichen Meldungen
+                Ergebnis.Text = fehler.Message;
             }
             catch (Exception)
             {
-                Ergebnis.Text = "Unerwarteter Fehler.";  // alles, womit wir nicht gerechnet haben
+                Ergebnis.Text = "Unerwarteter Fehler.";
             }
         }
 
@@ -164,6 +172,36 @@ namespace ScientificCalculator
             bool aktiv = Inv.IsChecked == true;
             Inv.IsChecked = false;
             return aktiv;
+        }
+
+        private void SpeicherAktion(string taste)
+        {
+            switch (taste)
+            {
+                case "MC":
+                    speicher.Loeschen();
+                    break;
+                case "MR":
+                    WertEinfuegen(speicher.Wert);
+                    break;
+                case "MS":
+                    Berechnen();
+                    if (letztesErgebnis != null) speicher.Speichern(letztesErgebnis.Value);
+                    break;
+                case "M+":
+                    Berechnen();
+                    if (letztesErgebnis != null) speicher.Addieren(letztesErgebnis.Value);
+                    break;
+            }
+            SpeicherSymbol.Text = speicher.IstBelegt ? "M" : "";
+        }
+
+        // Fügt eine Zahl in die Eingabe ein, negative Zahlen in Klammern
+        private void WertEinfuegen(double wert)
+        {
+            string text = wert.ToString(new CultureInfo("de-DE"));
+            if (wert < 0) text = "(" + text + ")";
+            Eingabe.Text += text;
         }
     }
 }

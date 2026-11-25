@@ -113,7 +113,9 @@
 					</StackPanel>
 				</Border>
 				<Border x:Name="SpeicherAnzeige" DockPanel.Dock="Left" Width="30" Height="24"
-                        Margin="10,0,0,0" BorderBrush="#ACA899" BorderThickness="1"/>
+        Margin="10,0,0,0" BorderBrush="#ACA899" BorderThickness="1">
+					<TextBlock x:Name="SpeicherSymbol" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+				</Border>
 				<Border x:Name="KlammerAnzeige" DockPanel.Dock="Left" Width="30" Height="24"
                         Margin="8,0,0,0" BorderBrush="#ACA899" BorderThickness="1"/>
 				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -168,7 +170,7 @@
 				<Button Grid.Row="0" Grid.Column="2"  Content="F-E" IsEnabled="False"/>
 				<Button Grid.Row="0" Grid.Column="3"  Content="("/>
 				<Button Grid.Row="0" Grid.Column="4"  Content=")"/>
-				<Button Grid.Row="0" Grid.Column="6"  Content="MC" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="0" Grid.Column="6"  Content="MC" Style="{StaticResource Operator}"/>
 				<Button Grid.Row="0" Grid.Column="8"  Content="7" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="0" Grid.Column="9"  Content="8" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="0" Grid.Column="10" Content="9" Style="{StaticResource Ziffer}"/>
@@ -181,7 +183,7 @@
 				<Button Grid.Row="1" Grid.Column="2"  Content="dms" IsEnabled="False"/>
 				<Button Grid.Row="1" Grid.Column="3"  Content="Exp" IsEnabled="False"/>
 				<Button Grid.Row="1" Grid.Column="4"  Content="ln"/>
-				<Button Grid.Row="1" Grid.Column="6"  Content="MR" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="1" Grid.Column="6"  Content="MR" Style="{StaticResource Operator}"/>
 				<Button Grid.Row="1" Grid.Column="8"  Content="4" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="1" Grid.Column="9"  Content="5" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="1" Grid.Column="10" Content="6" Style="{StaticResource Ziffer}"/>
@@ -194,7 +196,7 @@
 				<Button Grid.Row="2" Grid.Column="2"  Content="sin"/>
 				<Button Grid.Row="2" Grid.Column="3"  Content="x^y"/>
 				<Button Grid.Row="2" Grid.Column="4"  Content="log"/>
-				<Button Grid.Row="2" Grid.Column="6"  Content="MS" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="2" Grid.Column="6"  Content="MS" Style="{StaticResource Operator}"/>
 				<Button Grid.Row="2" Grid.Column="8"  Content="1" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="2" Grid.Column="9"  Content="2" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="2" Grid.Column="10" Content="3" Style="{StaticResource Ziffer}"/>
@@ -207,7 +209,7 @@
 				<Button Grid.Row="3" Grid.Column="2"  Content="cos"/>
 				<Button Grid.Row="3" Grid.Column="3"  Content="x^3"/>
 				<Button Grid.Row="3" Grid.Column="4"  Content="n!"/>
-				<Button Grid.Row="3" Grid.Column="6"  Content="M+" Style="{StaticResource Operator}" IsEnabled="False"/>
+				<Button Grid.Row="3" Grid.Column="6"  Content="M+" Style="{StaticResource Operator}"/>
 				<Button Grid.Row="3" Grid.Column="8"  Content="0" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="3" Grid.Column="9"  Content="+/-" Style="{StaticResource Ziffer}"/>
 				<Button Grid.Row="3" Grid.Column="10" Content="," Style="{StaticResource Ziffer}"/>
@@ -221,12 +223,12 @@
 				<Button Grid.Row="4" Grid.Column="3"  Content="x^2"/>
 				<Button Grid.Row="4" Grid.Column="4"  Content="1/x"/>
 				<Button Grid.Row="4" Grid.Column="6"  Content="pi" Style="{StaticResource Ziffer}"/>
-				<Button Grid.Row="4" Grid.Column="8"  Content="A" Style="{StaticResource Ziffer}" IsEnabled="False"/>
-				<Button Grid.Row="4" Grid.Column="9"  Content="B" Style="{StaticResource Ziffer}" IsEnabled="False"/>
-				<Button Grid.Row="4" Grid.Column="10" Content="C" Style="{StaticResource Ziffer}" IsEnabled="False"/>
-				<Button Grid.Row="4" Grid.Column="11" Content="D" Style="{StaticResource Ziffer}" IsEnabled="False"/>
-				<Button Grid.Row="4" Grid.Column="12" Content="E" Style="{StaticResource Ziffer}" IsEnabled="False"/>
-				<Button Grid.Row="4" Grid.Column="13" Content="F" Style="{StaticResource Ziffer}" IsEnabled="False"/>
+				<Button Grid.Row="4" Grid.Column="8"  Content="A" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="4" Grid.Column="9"  Content="B" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="4" Grid.Column="10" Content="C" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="4" Grid.Column="11" Content="D" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="4" Grid.Column="12" Content="E" Style="{StaticResource Ziffer}"/>
+				<Button Grid.Row="4" Grid.Column="13" Content="F" Style="{StaticResource Ziffer}"/>
 			</Grid>
 		</StackPanel>
 	</DockPanel>
